@@ -21,14 +21,10 @@ const DataVisualize = ({navigation}) => {
   return (
     <SafeAreaView>
       <Flex mt="40px" alignItems="center">
-        {!data ? (
-          <Spinner mt="20" />
-        ) : (
-          <LinearChartComponent data={data} language={language} />
-        )}
+        <LinearChartComponent language={language} />
       </Flex>
       <Button mt="40px" mx="16px" onPress={() => navigation.goBack()}>
-        {language === 'eng' ? 'Go back' : 'Geri Dön'}
+        Geri Dön
       </Button>
     </SafeAreaView>
   );
