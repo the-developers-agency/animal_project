@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "150425401694",
+    "project_id": "animal-app-tda",
+    "storage_bucket": "animal-app-tda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150425401694:android:0e1ce3dd9d82f1370377cf",
+        "android_client_info": {
+          "package_name": "com.animal_app_tda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150425401694-u3qct6dcfjcgomlt1uf1hb9tushdfrqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjdqyd9EmRBHi15LkMWYtOpOOSelH9rVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150425401694-u3qct6dcfjcgomlt1uf1hb9tushdfrqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
