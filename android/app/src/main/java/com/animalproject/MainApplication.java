@@ -1,4 +1,4 @@
-package com.animalproject;
+package com.animal_app_tda;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

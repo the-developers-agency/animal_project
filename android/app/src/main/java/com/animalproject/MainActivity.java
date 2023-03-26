@@ -1,4 +1,4 @@
-package com.animalproject;
+package com.animal_app_tda;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
