@@ -111,7 +111,7 @@ const Home = ({navigation}) => {
         </Button>
         {totalUsers !== 0 && (
           <Text textAlign="center" mt="10">
-            {totalUsers} user(s) have entered the data in past 7 days
+            Geçtiğimiz 7 günde {totalUsers} kullanıcı veri girdi.
           </Text>
         )}
         {isDataSubmitted && (
