@@ -5,17 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
 import {LanguageContext} from '../Contexts/LanguageContexts';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import {db} from '../utils/firebase';
+import firestore from '@react-native-firebase/firestore';
+
 
 const Home = ({navigation}) => {
   const [sliderValue, setSliderValue] = useState();
@@ -56,25 +47,27 @@ const Home = ({navigation}) => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      const user = await AsyncStorage.getItem('user');
-      const id = JSON.parse(user).id;
-      const userDoc = await getDoc(doc(db, 'users', id));
-      if (userDoc.data()?.value) {
-        const {value, valueEntered} = userDoc.data();
-        const updatedVal = value + sliderValue;
-        const userObj = {
-          value: updatedVal,
-          updatedAt: moment().format('YYYY-MM-DD'),
-          valueEntered: valueEntered + 1,
-        };
-        await updateDoc(doc(db, 'users', id), userObj);
-      } else {
-        await setDoc(doc(db, 'users', id), {
-          value: sliderValue,
-          createdAt: moment().format('YYYY-MM-DD'),
-          valueEntered: 1,
-        });
+      const recordsCollection = firestore().collection('Records');
+      const today = moment().format('YYYY-MM-DD');
+      const recordDoc = await recordsCollection.doc(today).get();
+      const recordObj = {
+        value: 0,
+        count: 0,
+      };
+      if (recordDoc.data()?.value) {
+        const {value, count} = recordDoc.data();
+        recordObj.count = count;
+        recordObj.value = value;
       }
+      recordObj.value += sliderValue;
+      recordObj.count += 1;
+      recordObj.updateAt = new Date();
+      await recordsCollection.doc(today).set(recordObj);
+      const usersCollection = firestore().collection('Users');
+      // update user doc with updatedAt
+      const user = await AsyncStorage.getItem('user');
+      const userId = JSON.parse(user).id;
+      await usersCollection.doc(userId).update({updatedAt: new Date()});
       setIsDataSubmitted(true);
     } catch (err) {
       console.log('ERROR:: ', err);
@@ -92,23 +85,18 @@ const Home = ({navigation}) => {
   useEffect(() => {
     (async () => {
       try {
-        const usersRef = collection(db, 'users');
-        const q = query(
-          usersRef,
-          where(
-            'createdAt',
-            '>',
-            moment().subtract(7, 'd').format('YYYY-MM-DD'),
-          ),
-        );
-        const querySnapshot = await getDocs(q);
+        const recordsCollection = firestore().collection('Users');
+        // updatedAt is greater than 7 days
+        const querySnapshot = await recordsCollection
+          .where('updatedAt', '>=', moment().subtract(7, 'days').toDate())
+          .get();
+        console.log("querySnapshot", querySnapshot.size);
         setTotalUsers(querySnapshot.size);
-        // querySnapshot.forEach(item => console.log('doc:: ', item.data()));
       } catch (err) {
         console.log('ERROR:: ', err);
       }
     })();
-  }, []);
+  }, [isDataSubmitted]);
 
   return (
     <SafeAreaView flex={1}>

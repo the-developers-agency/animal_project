@@ -5,6 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 import {db} from '../../utils/firebase';
+import firestore from '@react-native-firebase/firestore';
 
 const LinearChartComponent = ({language}) => {
   const [labels, setLabels] = useState();
@@ -47,40 +48,25 @@ const LinearChartComponent = ({language}) => {
     (async () => {
       try {
         setIsLoading(true);
-        const docsRef = collection(db, 'users');
-        const q = query(
-          docsRef,
-          where(
-            'createdAt',
-            '>',
-            moment().subtract(7, 'd').format('YYYY-MM-DD'),
-          ),
-        );
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => doc.data());
-        const groups = data.reduce((group, item) => {
-          const day = item.createdAt;
-          if (!group[day]) {
-            group[day] = [];
-          }
-          group[day].push(item);
-          return group;
-        }, {});
+        const recordsCollection = firestore().collection('Records');
+        const past7DaysArray = [];
+        for (let i = 0; i < 7; i++) {
+          past7DaysArray.push(moment().subtract(i, 'd').format('YYYY-MM-DD'));
+        }
+        const querySnapshot = await recordsCollection
+          .where(firestore.FieldPath.documentId(), 'in', past7DaysArray)
+          .get();
+        const datapoints = [];
+        querySnapshot.forEach(item => {
+          datapoints.push(item.data().value / item.data().count);
+        });
         // console.log('groups:: ', groups);
         setLabels(
-          Object.keys(groups).map(item =>
+          past7DaysArray.map(item =>
             moment(item).format('dddd').substring(0, 3),
           ),
         );
-        const avg = Object.keys(groups).reduce((values, item) => {
-          let total = 0;
-          groups[item].forEach(
-            el => (total = total + el.value / el.valueEntered),
-          );
-          values.push(total);
-          return values;
-        }, []);
-        setAvgData(avg);
+        setAvgData(datapoints);
       } catch (err) {
         console.log('ERROR:: ', err);
         Alert.alert('Could not display the data', 'Please try again later');

@@ -8,7 +8,6 @@ import {v4 as uuidv4} from 'uuid';
 import RootStack from './src/navigation/RootStack';
 import {LanguageContext} from './src/Contexts/LanguageContexts';
 import {db} from './src/utils/firebase';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 
 const App = () => {
