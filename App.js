@@ -19,15 +19,12 @@ const App = () => {
       try {
         const userExist = await AsyncStorage.getItem('user');
         if (!userExist) {
-          console.log("User doesn't exist");
           const id = uuidv4();
           await AsyncStorage.setItem('user', JSON.stringify({id}));
           const usersCollection = firestore().collection('Users');
           await usersCollection.doc(id).set({
             id,
           });
-        } else {
-          console.log("User does exist");
         }
 
       } catch (err) {

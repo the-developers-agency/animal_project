@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
 import {LanguageContext} from '../Contexts/LanguageContexts';
-import firestore from '@react-native-firebase/firestore';
+import db from '../utils/db';
 
 
 const Home = ({navigation}) => {
@@ -47,27 +47,7 @@ const Home = ({navigation}) => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      const recordsCollection = firestore().collection('Records');
-      const today = moment().format('YYYY-MM-DD');
-      const recordDoc = await recordsCollection.doc(today).get();
-      const recordObj = {
-        value: 0,
-        count: 0,
-      };
-      if (recordDoc.data()?.value) {
-        const {value, count} = recordDoc.data();
-        recordObj.count = count;
-        recordObj.value = value;
-      }
-      recordObj.value += sliderValue;
-      recordObj.count += 1;
-      recordObj.updateAt = new Date();
-      await recordsCollection.doc(today).set(recordObj);
-      const usersCollection = firestore().collection('Users');
-      // update user doc with updatedAt
-      const user = await AsyncStorage.getItem('user');
-      const userId = JSON.parse(user).id;
-      await usersCollection.doc(userId).update({updatedAt: new Date()});
+      await db.updateData(sliderValue);
       setIsDataSubmitted(true);
     } catch (err) {
       console.log('ERROR:: ', err);
@@ -85,13 +65,8 @@ const Home = ({navigation}) => {
   useEffect(() => {
     (async () => {
       try {
-        const recordsCollection = firestore().collection('Users');
-        // updatedAt is greater than 7 days
-        const querySnapshot = await recordsCollection
-          .where('updatedAt', '>=', moment().subtract(7, 'days').toDate())
-          .get();
-        console.log("querySnapshot", querySnapshot.size);
-        setTotalUsers(querySnapshot.size);
+        const uniqueUsers = await db.getPast7DayUsers();
+        setTotalUsers(uniqueUsers);
       } catch (err) {
         console.log('ERROR:: ', err);
       }
