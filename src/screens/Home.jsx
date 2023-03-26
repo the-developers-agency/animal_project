@@ -1,11 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Alert, Linking, SafeAreaView} from 'react-native';
 import {Box, Button, Heading, HStack, Slider, Text} from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
-import moment from 'moment';
 import {LanguageContext} from '../Contexts/LanguageContexts';
-import db from '../utils/db';
+import Database from '../utils/db.js';
 
 
 const Home = ({navigation}) => {
@@ -47,7 +45,7 @@ const Home = ({navigation}) => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await db.updateData(sliderValue);
+      await Database.updateData(sliderValue);
       setIsDataSubmitted(true);
     } catch (err) {
       console.log('ERROR:: ', err);
@@ -65,7 +63,7 @@ const Home = ({navigation}) => {
   useEffect(() => {
     (async () => {
       try {
-        const uniqueUsers = await db.getPast7DayUsers();
+        const uniqueUsers = await Database.getPast7DayUsers();
         setTotalUsers(uniqueUsers);
       } catch (err) {
         console.log('ERROR:: ', err);

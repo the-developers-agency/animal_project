@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 
-import db from '../utils/db';
+import Database from '../../utils/db.js';
 
 const LinearChartComponent = ({language}) => {
   const [labels, setLabels] = useState();
@@ -20,7 +20,7 @@ const LinearChartComponent = ({language}) => {
     (async () => {
       try {
         setIsLoading(true);
-        const data = await db.getWeeklyDataPoints();
+        const data = await Database.getWeeklyDataPoints();
         setAvgData(data[0]);
         setLabels(data[1]);
       } catch (err) {
