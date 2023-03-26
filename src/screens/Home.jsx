@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Linking, SafeAreaView} from 'react-native';
+import {Alert, Linking, SafeAreaView, View} from 'react-native';
 import {Box, Button, Heading, HStack, Slider, Text} from 'native-base';
 import {useIsFocused} from '@react-navigation/native';
 import {LanguageContext} from '../Contexts/LanguageContexts';
 import Database from '../utils/db.js';
-
 
 const Home = ({navigation}) => {
   const [sliderValue, setSliderValue] = useState();
@@ -74,10 +73,12 @@ const Home = ({navigation}) => {
   return (
     <SafeAreaView flex={1}>
       <Box px="16px" flex={1}>
-        <Heading mt="40px" textAlign="center">
-          İstanbul Depreme Hazırlık Uygulaması
-        </Heading>
-        <Text fontSize="16px" mt="40px">
+        <View style={{width: '70%', alignSelf: 'center'}}>
+          <Heading mt="40px" textAlign="center">
+            İstanbul Depreme Hazırlık Uygulaması
+          </Heading>
+        </View>
+        <Text fontSize="16px" mt="40px" style={{textAlign: 'center'}}>
           Son hafta içinde evcil hayvanlarınızın, çiftlik hayvanlarınızın veya
           doğanın davranışlarını nasıl değerlendirirsiniz?
         </Text>

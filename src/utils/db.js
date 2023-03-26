@@ -21,12 +21,12 @@ const updateData = async (inputVal) => {
     value: 0,
     count: 0,
   };
-  if (recordDoc.data()?.value) {
+  if (recordDoc.exists) {
     const {value, count} = recordDoc.data();
     recordObj.count = count;
     recordObj.value = value;
   }
-  recordObj.value += inputVal;
+  recordObj.value += inputVal || 0;
   recordObj.count += 1;
   recordObj.updateAt = new Date();
   const prom1 = recordsCollection.doc(today).set(recordObj);
@@ -49,12 +49,15 @@ const getWeeklyDataPoints = async () => {
     .get();
   const datapoints = [];
   querySnapshot.forEach(item => {
-    datapoints.push(item.data().value / item.data().count);
+    const {value, count} = item.data();
+    const val = value / count ;
+    datapoints.push(val ? val : 0);
   });
   // console.log('groups:: ', groups);
   const labels = past7DaysArray.map(item =>
     moment(item).format('dddd').substring(0, 3),
   );
+  console.log("datapoints:: ", datapoints);
   return [datapoints, labels];
 }
 const db = {

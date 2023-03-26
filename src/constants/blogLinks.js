@@ -1,3 +1,38 @@
+const REFS = [
+  {
+      text: 'Hayvanların daha küçük depremleri önceden algıladıkları bilinmektedir.'
+  },
+  {
+      text: 'Yapılan çalışmalar, kediler, köpekler ve atlar gibi bazı türlerin'
+  },
+  {
+      text: 'hava basıncındaki ve deprem öncesi meydana gelen'
+  },
+  {
+      text: 'titreşimlerdeki değişiklikleri koklama, duyma ve titreşim algılama'
+  },
+  {
+      text: 'yetenekleriyle algılayabildiklerini ortaya koymuştur.'
+  },
+  {
+      text: 'Ayrıca, bazı hayvanların özellikle balıkların deprem öncesi'
+  },
+  {
+      text: 'anormal davranışlar sergiledikleri gözlenmiştir'
+  },
+  {
+      text: 'Hayvanlar büyüklük 2.0a kadar olan depremleri algıladıkları gösterilmiştir'
+  },
+  {
+      text: 'Türkiye Deprem Bildirim Sistemi (TEN) verilerine göre,'
+  },
+  {
+      text: 'son 2 yılda İstanbul çevresinde büyüklük 2.0 veya daha büyük 126 deprem meydana geldi'
+  },
+  {
+      text: 'Genel olarak, hayvanların birkaç saat öncesinden deprem algıladıkları gözlenmiştir'
+  }
+];
 const BLOG_LINKS = [
   {
     text: '"Deprem Tahmini: Hayvanlar Depremleri Algılayabiliyor mu?" Dünya Gözlemi, NASA, 1 Haziran 2011,',
@@ -17,4 +52,8 @@ const BLOG_LINKS = [
   },
 ];
 
-export default BLOG_LINKS;
+const refs = {
+  REFS,
+  BLOG_LINKS,
+}
+export default refs;

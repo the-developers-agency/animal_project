@@ -1,11 +1,12 @@
 import {Box, Button, Text, VStack} from 'native-base';
 import React, {useContext} from 'react';
 import {Alert, Linking, SafeAreaView} from 'react-native';
-import BLOG_LINKS from '../constants/blogLinks';
+import refs from '../constants/blogLinks';
 import {LanguageContext} from '../Contexts/LanguageContexts';
 
 const LearnMore = ({navigation}) => {
   const {language} = useContext(LanguageContext);
+  console.log("REFS::", refs.REFS);
 
   const handleOpenLink = async url => {
     const canOpen = await Linking.canOpenURL(url);
@@ -20,7 +21,14 @@ const LearnMore = ({navigation}) => {
   return (
     <SafeAreaView flex={1}>
       <VStack flex={1} px="16px" space="10px" mt="40px">
-        {BLOG_LINKS.map((item, idx) => (
+        {refs.REFS.map((item, idx) => (
+          <Box key={idx}>
+            <Text>
+              {item.text}
+            </Text>
+          </Box>
+        ))}
+        {refs.BLOG_LINKS.map((item, idx) => (
           <Box key={idx}>
             <Text>
               {idx + 1}. {item.text}
